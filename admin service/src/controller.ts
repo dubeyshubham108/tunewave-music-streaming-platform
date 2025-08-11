@@ -75,13 +75,35 @@ export const addSong = TryCatch(async(req: AuthenticatedRequest, res) => {
 
     const file = req.file;
 
+    if(!file) {
+        res.status(400).json({
+            message: "No file to upload",
+        });
+        return;
+    }
+
     const fileBuffer = getBuffer(file);
 
     if(!fileBuffer || !fileBuffer.content) {
         res.status(500).json({
             message: "Failed to generate file buffer",
-        })
+        });
+        return;
     }
+
+    const cloud = await cloudinary.v2.uploader.upload(fileBuffer.content, {
+        folder: "songs",
+        resource_type: "auto",
+    });
+
+    const result = await sql`
+        INSERT INTO songs (title, description, audio, album_id) VALUES
+        (${title}, ${description}, ${cloud.secure_url}, ${album})
+    `;
+
+    res.json({
+        message: "Song Added",
+    });
 
 });
 
