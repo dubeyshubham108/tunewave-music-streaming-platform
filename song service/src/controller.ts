@@ -22,7 +22,7 @@ export const getAllSongsOfAlbum = TryCatch(async(req, res) => {
 
     let album, songs;
 
-    album = await sql`SELECT * FROM albums WHERE if = {id}`
+    album = await sql`SELECT * FROM albums WHERE id = ${id}`
 
     if(album.length === 0) {
         res.status(404).json({
@@ -39,8 +39,10 @@ export const getAllSongsOfAlbum = TryCatch(async(req, res) => {
 });
 
 export const getSingleSong = TryCatch(async(req, res) => {
-    const song = await sql `SELECT * FROM songs WHERE id = ${req.params.id}`;
+    const song = await sql `SELECT * FROM songs WHERE album_id = ${req.params.id}`;
 
     res.json(song[0]);    
 });
+
+
 
