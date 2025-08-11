@@ -3,6 +3,7 @@ import { Request } from "express";
 import getBuffer from "./config/dataUri.js";
 import cloudinary from "cloudinary";
 import { sql } from "./config/db.js";
+import { redisClient } from "./index.js";
 
 
 interface AuthenticatedRequest extends Request {
@@ -48,6 +49,13 @@ export const addAlbum = TryCatch(async(req: AuthenticatedRequest, res) => {
         INSERT INTO albums (title, description, thumbnail) VALUES (${title}, ${description}, ${cloud.secure_url})
         RETURNING *
     `;
+
+    if(redisClient.isReady) {
+        await redisClient.del("albums");
+        console.log("Cached cleared for albums");
+    }
+
+
     res.json({
         message: "Album Created",
         album: result[0],
@@ -100,6 +108,12 @@ export const addSong = TryCatch(async(req: AuthenticatedRequest, res) => {
         INSERT INTO songs (title, description, audio, album_id) VALUES
         (${title}, ${description}, ${cloud.secure_url}, ${album})
     `;
+
+    // once the song is added it will clear cache
+    if(redisClient.isReady) {
+        await redisClient.del("songs");
+        console.log("Cached cleared for songs");
+    }
 
     res.json({
         message: "Song Added",
@@ -176,6 +190,16 @@ export const deleteAlbum = TryCatch(async(req:AuthenticatedRequest, res) => {
 
     await sql `DELETE FROM albums WHERE id = ${id}`;
 
+    if(redisClient.isReady) {
+        await redisClient.del("albums");
+        console.log("Cached cleared for albums");
+    }
+
+    if(redisClient.isReady) {
+        await redisClient.del("songs");
+        console.log("Cached cleared for songs");
+    }
+
     res.json({
         message: "Album deleted successfully",
     });
@@ -201,6 +225,11 @@ export const deleteSong = TryCatch(async(req: AuthenticatedRequest, res) => {
     }
 
     await sql `DELETE FROM songs WHERE id = ${id}`;
+
+    if(redisClient.isReady) {
+        await redisClient.del("songs");
+        console.log("Cached cleared for songs");
+    }
 
     res.json({
         message: "Song Deleted Successfully",

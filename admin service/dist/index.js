@@ -3,7 +3,18 @@ import dotenv from "dotenv";
 import { sql } from "./config/db.js";
 import adminRoutes from "./route.js";
 import cloudinary from "cloudinary";
+import redis from "redis";
 dotenv.config();
+export const redisClient = redis.createClient({
+    password: process.env.Redis_Password,
+    socket: {
+        host: "redis-15113.c212.ap-south-1-1.ec2.redns.redis-cloud.com",
+        port: 15113
+    }
+});
+redisClient.connect().then(() => {
+    console.log("Connectd to Redis");
+}).catch(console.error);
 cloudinary.v2.config({
     cloud_name: process.env.CLOUD_NAME,
     api_key: process.env.CLOUD_API_KEY,
