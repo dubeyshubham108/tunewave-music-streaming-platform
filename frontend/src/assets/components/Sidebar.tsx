@@ -34,6 +34,14 @@ const Sidebar = () => {
                 <div onClick={() => navigate("/playlist")}>
                     <PlayListCard />
                 </div>
+
+                <div className="p-4 m-2 bg-[#121212] rounded font-semibold flex flex-col items-start gap-1 pl-4 mt-4">
+                    <h1>Let's findsome podcasts to follow</h1>
+                    <p className="font-light">We'll keep you update on new episodes</p>
+                    <button className="px-4 py-1.5 bg-white text-black cursor-pointer text-[15px] rounded-full mt-4">
+                        Browse Podcasts
+                    </button>
+                </div>
             </div>
         </div>
     )
