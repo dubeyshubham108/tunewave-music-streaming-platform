@@ -8,8 +8,8 @@
 
     /* Bundler mode */
     "moduleResolution": "bundler",
+    "verbatimModuleSyntax": false,
     "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
     "moduleDetection": "force",
     "noEmit": true,
 
