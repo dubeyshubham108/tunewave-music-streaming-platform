@@ -1,4 +1,5 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from "react";
+import axios from "axios";
 
 const server = "http://localhost:7000"
 
@@ -29,8 +30,28 @@ interface SongProviderProps {
 };
 
 export const SongProvider: React.FC<SongProviderProps> = ({children}) => {
-    const [ songs, setSongs ] = useState<Song[]>([])
-    return <SongContext.Provider value = {{songs}}> {children} </SongContext.Provider>
+    const [ songs, setSongs ] = useState<Song[]>([]);
+    const [ loading, setLoading ] = useState<boolean>(true);
+    const [ selectedSong, setSelectedSong ] = useState<string | null>(null);
+    const [ isPlaying, setIsPlaying ] = useState<boolean>(false);
+
+    const fetchSongs = useCallback(async() => {
+        try {
+            const { data } = await axios.get<Song[]>(`${server}/api/v1/song/all`);
+            setSongs(data);
+            if(data.length>0) setSelectedSong(data[0].id.toString()) 
+                setIsPlaying(false);
+            
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    }, [])
+
+    return (
+        <SongContext.Provider value = {{songs}}> {children} </SongContext.Provider>
+    )
 };
 
 export const useSongData = () : SongContextType => {
@@ -40,5 +61,4 @@ export const useSongData = () : SongContextType => {
     }
     return context;
 };
-
 
