@@ -36,6 +36,8 @@ interface SongContextType {
   setSelectedSong: (id: string) => void;
   albums: Album[];
   fetchSingleSong: () => Promise<void>;
+  nextSong: () => void;
+  prevSong: () => void;
 }
 
 const SongContext = createContext<SongContextType | undefined>(undefined);
@@ -124,6 +126,8 @@ export const SongProvider: React.FC<SongProviderProps> = ({ children }) => {
         albums,
         fetchSingleSong,
         song,
+        nextSong,
+        prevSong
       }}
     >
       {children}{" "}
