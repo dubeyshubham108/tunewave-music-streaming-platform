@@ -21,6 +21,12 @@ export interface Album {
 
 interface SongContextType {
     songs: Song[];
+    isPlaying: boolean;
+    setIsPlaying: (value: boolean) => void;
+    loading: boolean;
+    selectedSong: string | null;
+    setSelectedSong: (id: string) => void;
+    albums: Album[];
 }
 
 const SongContext = createContext<SongContextType | undefined>(undefined);
@@ -34,8 +40,10 @@ export const SongProvider: React.FC<SongProviderProps> = ({children}) => {
     const [ loading, setLoading ] = useState<boolean>(true);
     const [ selectedSong, setSelectedSong ] = useState<string | null>(null);
     const [ isPlaying, setIsPlaying ] = useState<boolean>(false);
+    const [ albums, setAlbums ] = useState<Album[]>([]);
 
     const fetchSongs = useCallback(async() => {
+        setLoading(true);
         try {
             const { data } = await axios.get<Song[]>(`${server}/api/v1/song/all`);
             setSongs(data);
@@ -47,10 +55,36 @@ export const SongProvider: React.FC<SongProviderProps> = ({children}) => {
         } finally {
             setLoading(false);
         }
+    }, []);
+
+    const fetchAlbums = useCallback(async()=> {
+        try {
+            const {data} = await axios.get<Album[]>(`${server}/api/v1/album/all`)
+            setAlbums(data);
+        } catch (error) {
+            console.log(error);
+            
+        }
     }, [])
 
+    useEffect(() => {
+        fetchSongs();
+        fetchAlbums();
+    }, []);
+
     return (
-        <SongContext.Provider value = {{songs}}> {children} </SongContext.Provider>
+        <SongContext.Provider 
+            value = {{
+                songs, 
+                selectedSong, 
+                setSelectedSong, 
+                isPlaying, 
+                setIsPlaying, 
+                loading,
+                albums
+            }}
+            >
+             {children} </SongContext.Provider>
     )
 };
 
