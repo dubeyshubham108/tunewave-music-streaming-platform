@@ -1,6 +1,7 @@
 import Layout from "../assets/components/Layout";
 import { useSongData } from "../context/SongContext";
 import AlbumCard from "../assets/components/AlbumCard";
+import SongCard from "../assets/components/SongCard";
 
 const Home = () => {
   const { albums, songs } = useSongData();
@@ -27,9 +28,9 @@ const Home = () => {
         <div className="mb-4">
           <h1 className="my-5 font-bold text-2xl">Today's biggest hits</h1>
           <div className="flex overflow-auto">
-            {albums?.map((e, i) => {
+            {songs?.map((e, i) => {
               return (
-                <AlbumCard
+                <SongCard
                   key={i}
                   image={e.thumbnail}
                   name={e.title}
