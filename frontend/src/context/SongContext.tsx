@@ -90,22 +90,22 @@ export const SongProvider: React.FC<SongProviderProps> = ({ children }) => {
     }
   }, []);
 
-  const [ index, setIndex ] = useState<number>(0)
+  const [index, setIndex] = useState<number>(0);
 
   const nextSong = useCallback(() => {
-    if(index === songs.length - 1) {
-        setIndex(0);
-        setSelectedSong(songs[0]?.toString());
+    if (index === songs.length - 1) {
+      setIndex(0);
+      setSelectedSong(songs[0]?.toString());
     } else {
-        setIndex((prevIndex) => prevIndex+1);
-        setSelectedSong(songs[index+1]?.id.toString())
+      setIndex((prevIndex) => prevIndex + 1);
+      setSelectedSong(songs[index + 1]?.id.toString());
     }
   }, [index, songs]);
 
   const prevSong = useCallback(() => {
-    if(index>0) {
-        setIndex((prev)=> prev-1);
-        setSelectedSong(songs[index-1]?.id.toString());
+    if (index > 0) {
+      setIndex((prev) => prev - 1);
+      setSelectedSong(songs[index - 1]?.id.toString());
     }
   }, [index, songs]);
 
@@ -127,7 +127,7 @@ export const SongProvider: React.FC<SongProviderProps> = ({ children }) => {
         fetchSingleSong,
         song,
         nextSong,
-        prevSong
+        prevSong,
       }}
     >
       {children}{" "}
