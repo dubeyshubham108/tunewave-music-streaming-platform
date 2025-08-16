@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSongData } from "../../context/SongContext";
+import { GrChapterNext, GrChapterPrevious } from "react-icons/gr";
+import { FaPause, FaPlay } from "react-icons/fa";
 
 const Player = () => {
   const {
@@ -97,9 +99,26 @@ const Player = () => {
                 min={"0"}
                 max={"100"}
                 className="progress-bar w-[1200px] md:w-[300]"
-                value={(progress/duration) * 100 || 0}
+                value={(progress / duration) * 100 || 0}
                 onChange={durationChange}
               />
+            </div>
+
+            <div className="flex justify-center items-center gap-4">
+              <span className="cursor-pointer" onClick={prevSong}>
+                <GrChapterPrevious />
+              </span>
+
+              <button
+                className="bg-white text-black rounded-full p-2"
+                onClick={handlePlayPause}
+              >
+                {isPlaying ? <FaPause /> : <FaPlay />}
+              </button>
+
+              <span className="cursor-pointer" onClick={nextSong}>
+                <GrChapterNext />
+              </span>
             </div>
           </div>
         </div>
