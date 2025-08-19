@@ -54,7 +54,7 @@ const Player = () => {
   };
 
   const volumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newVolume = parseFloat(e.target.value);
+    const newVolume = parseFloat(e.target.value)/100;
     setVolume(newVolume);
     if (audioRef.current) {
       audioRef.current.volume = newVolume;
@@ -110,7 +110,7 @@ const Player = () => {
               </span>
 
               <button
-                className="bg-white text-black rounded-full p-2"
+                className="bg-white text-black rounded-full p-2 cursor-pointer"
                 onClick={handlePlayPause}
               >
                 {isPlaying ? <FaPause /> : <FaPlay />}
@@ -120,6 +120,18 @@ const Player = () => {
                 <GrChapterNext />
               </span>
             </div>
+          </div>
+
+          <div className="flex items-center">
+            <input
+              type="range"
+              className="w-16 md:w-32"
+              min={"0"}
+              max={"100"}
+              step={"0.01"}
+              value={volume * 100}
+              onChange={volumeChange}
+            />
           </div>
         </div>
       )}

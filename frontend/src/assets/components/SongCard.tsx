@@ -12,7 +12,7 @@ const SongCard: React.FC<SongCardProps> = ({ image, name, desc, id }) => {
   return (
     <div className="min-w-[180px] p-2 px-3 rounded cursor-pointer hover:bg-[#ffffff26]">
       <div className="relative group ">
-        <img src={image? image: "/song.jpg"} className="mr-1 w-[160px] rounded w-24 h-30" alt="" />
+        <img src={image? image: "/song.jpg"} className="mr-1 w-[160px] rounded w-24 h-30" alt={name} />
         <div className="flex gap-2">
           <button className="absolute bottom-2 right-14 bg-green-500 text-black rounded-full p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <FaPlay />
